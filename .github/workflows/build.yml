@@ -1,0 +1,45 @@
+name: Build Dante for aarch64 (musl static)
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Install musl-based AArch64 toolchain
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y musl-tools wget xz-utils build-essential automake autoconf libtool
+        # 安装 musl aarch64 交叉编译工具链
+        wget https://pan.tenire.com/down.php/a6bb806af217a91cf575e15163e8b12b.tgz
+        tar -xzf a6bb806af217a91cf575e15163e8b12b.tgz
+        sudo mv aarch64-linux-musl-cross /opt/aarch64-linux-musl-cross
+        echo "/opt/aarch64-linux-musl-cross/bin" >> $GITHUB_PATH
+
+    - name: Prepare build system
+      run: |
+        autoreconf -fi
+
+    - name: Build static binary for aarch64 with musl
+      run: |
+        ./configure --host=aarch64-linux-musl --prefix=$PWD/out \
+          CC=aarch64-linux-musl-gcc \
+          CFLAGS="-O2" \
+          LDFLAGS="-static -s"
+        make -j$(nproc)
+        make install
+        file out/sbin/sockd  # 验证是 aarch64 静态可执行文件
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: dante-aarch64-musl-static
+        path: out/sbin/sockd
