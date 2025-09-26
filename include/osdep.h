@@ -109,12 +109,13 @@
 #endif /* SOCKS_DLIB_OSF */
 #include <sys/wait.h>
 #ifdef HAVE_SYS_SELECT_H
+#define HAVE_SYS_SELECT_H 1
 #include <sys/select.h>
 
 #undef HAVE_PSELECT
 #define NO_PSELECT
 
-#endif /* HAVE_SYS_SELECT_H */
+//#endif /* HAVE_SYS_SELECT_H */
 #include <netinet/in.h>
 #include <netinet/in_systm.h>
 #if HAVE_NETINET_IP_H
