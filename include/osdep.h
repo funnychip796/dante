@@ -110,6 +110,10 @@
 #include <sys/wait.h>
 #ifdef HAVE_SYS_SELECT_H
 #include <sys/select.h>
+
+#undef HAVE_PSELECT
+#define NO_PSELECT
+
 #endif /* HAVE_SYS_SELECT_H */
 #include <netinet/in.h>
 #include <netinet/in_systm.h>
