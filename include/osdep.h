@@ -108,7 +108,7 @@
 #define __DECC
 #endif /* SOCKS_DLIB_OSF */
 #include <sys/wait.h>
-#ifdef HAVE_SYS_SELECT_H
+//#ifdef HAVE_SYS_SELECT_H
 #define HAVE_SYS_SELECT_H 1
 #include <sys/select.h>
 
